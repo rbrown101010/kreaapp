@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Element {
+  id          String   @id @default(uuid())
+  name        String
+  imageBase64 String
+  mimeType    String
+  color       String   @default("#F59E0B")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model GeneratedImage {
+  id          String   @id @default(uuid())
+  imageBase64 String
+  mimeType    String
+  prompt      String
+  aspectRatio String
+  favorite    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}

@@ -1,0 +1,17 @@
+#!/bin/bash
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# Install dependencies
+echo "Installing dependencies..."
+bun install
+
+# If --hot flag is provided, start in development mode with hot reload.
+if [[ "$*" == *"--hot"* ]]; then
+  echo "Starting server in dev mode with hot reload..."
+  exec bun run dev
+else
+  echo "Starting server..."
+  exec bun run src/index.ts
+fi

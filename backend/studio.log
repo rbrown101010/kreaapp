@@ -1,0 +1,172 @@
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.06ms] ".env"
+bun install v1.2.19 (aad3abea)
+
++ @types/bun@1.2.23
++ prisma@6.19.1
++ typescript@5.8.3
++ @hono/node-server@1.12.0
++ @hono/zod-validator@0.7.6
++ @prisma/client@6.19.1
++ @vibecodeapp/cloud-studio@0.2.2
++ @vibecodeapp/proxy@2.0.1
++ dotenv@17.2.3
++ hono@4.6.0
++ zod@4.1.11
+
+103 packages installed [6.60s]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.69ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
+Checked 103 installs across 104 packages (no changes) [8.00ms]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.07ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
+Checked 103 installs across 104 packages (no changes) [11.00ms]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
+error: script "studio" was terminated by signal SIGTERM (Polite quit request)
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.06ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
+Checked 103 installs across 104 packages (no changes) [8.00ms]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.05ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
+Checked 103 installs across 104 packages (no changes) [5.00ms]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.06ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
+Checked 103 installs across 104 packages (no changes) [6.00ms]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.13ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
+Checked 103 installs across 104 packages (no changes) [11.00ms]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.06ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
+Checked 104 installs across 105 packages (no changes) [11.00ms]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.06ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
+Checked 104 installs across 105 packages (no changes) [13.00ms]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
+error: script "studio" was terminated by signal SIGTERM (Polite quit request)
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.06ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
+Checked 104 installs across 105 packages (no changes) [7.00ms]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.07ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
++ @types/bun@1.2.23
++ prisma@6.19.1
++ typescript@5.8.3
++ @hono/node-server@1.12.0
++ @hono/zod-validator@0.7.6
++ @prisma/client@6.19.1
++ @vibecodeapp/backend-sdk@1.0.1
++ @vibecodeapp/cloud-studio@0.2.4
++ @vibecodeapp/proxy@2.0.3
++ dotenv@17.2.3
++ hono@4.6.0
++ zod@4.1.11
+
+104 packages installed [5.93s]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.06ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
+1 package installed [6.00ms]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
++ exec gosu vibecode scripts/studio
+Installing dependencies and generating Prisma client...
+[0.07ms] ".env.production", ".env"
+bun install v1.2.19 (aad3abea)
+
+Checked 104 installs across 105 packages (no changes) [9.00ms]
+Starting Cloud Studio...
+$ cloud-studio --port 3001 --hostname 0.0.0.0
+Cloud Studio starting on http://0.0.0.0:3001
+Cloud Studio is running at http://0.0.0.0:3001
+Prisma Client connected
