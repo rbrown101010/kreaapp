@@ -1,0 +1,14 @@
+{
+  "entryPoint": "index.js",
+  "compatibilityDate": "2026-04-24",
+  "kvNamespaces": [
+    {
+      "bindingName": "THUMBNAILS"
+    }
+  ],
+  "secrets": [
+    {
+      "bindingName": "OPENAI_API_KEY"
+    }
+  ]
+}

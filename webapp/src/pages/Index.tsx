@@ -15,7 +15,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ImagePlus, Grid3X3, Download, X, Loader2, GripVertical, CornerDownLeft, Sparkles, ChevronLeft, ChevronRight, ImageDown, Star, CheckSquare, Upload, Youtube } from "lucide-react";
+import { ImagePlus, Grid3X3, Download, X, Loader2, GripVertical, CornerDownLeft, Sparkles, ChevronLeft, ChevronRight, ImageDown, Star, CheckSquare, Upload, Youtube, Wand2, Copy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
@@ -87,6 +87,9 @@ const Index = () => {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedImages, setSelectedImages] = useState<Set<string>>(new Set());
+  const [editingImage, setEditingImage] = useState<GeneratedImage | null>(null);
+  const [editPrompt, setEditPrompt] = useState("");
+  const [isEditingImage, setIsEditingImage] = useState(false);
 
   // Add Images Dialog state
   const [isAddImagesDialogOpen, setIsAddImagesDialogOpen] = useState(false);
@@ -104,7 +107,7 @@ const Index = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropZoneRef = useRef<HTMLDivElement>(null);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "https://riley-thumbnail-api.worker.chorus.host";
 
   useEffect(() => {
     fetchElements();
@@ -569,7 +572,7 @@ const Index = () => {
 
         if (!res.ok) {
           const error = await res.json();
-          throw new Error(error.message || "Generation failed");
+          throw new Error(error.details || error.error || error.message || "Generation failed");
         }
 
         const data = await res.json();
@@ -585,6 +588,7 @@ const Index = () => {
         // Remove from pending and add to generated
         setPendingGenerations((prev) => prev.filter((p) => p.id !== generationId));
         setGeneratedImages((prev) => [newImage, ...prev]);
+        setTotalImages((prev) => prev + 1);
         toast.success("Thumbnail generated!");
       } catch (error) {
         console.error("Generation error:", error);
@@ -592,6 +596,94 @@ const Index = () => {
         toast.error("Failed to generate image. Please try again.");
       }
     })();
+  };
+
+  const openEditDialog = (image: GeneratedImage, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    setViewingImage(null);
+    setEditingImage(image);
+    setEditPrompt("");
+  };
+
+  const handleEditImage = async () => {
+    if (!editingImage || !editPrompt.trim()) return;
+
+    const generationId = `edit-${Date.now()}`;
+    const currentImage = editingImage;
+    const currentPrompt = editPrompt.trim();
+
+    setIsEditingImage(true);
+    setPendingGenerations((prev) => [
+      { id: generationId, prompt: currentPrompt, startedAt: new Date() },
+      ...prev,
+    ]);
+
+    try {
+      const res = await fetch(`${backendUrl}/api/generate/${currentImage.id}/edit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: currentPrompt,
+          aspectRatio,
+          referenceImages: referenceImages.map((img) => ({
+            name: img.name,
+            imageBase64: img.imageBase64,
+            mimeType: img.mimeType,
+          })),
+        }),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.details || error.error || "Edit failed");
+      }
+
+      const data = await res.json();
+      const newImage: GeneratedImage = {
+        id: data.id,
+        base64: data.image,
+        prompt: currentPrompt,
+        favorite: false,
+        createdAt: new Date(),
+      };
+
+      setGeneratedImages((prev) => [newImage, ...prev]);
+      setTotalImages((prev) => prev + 1);
+      setEditingImage(null);
+      setEditPrompt("");
+      toast.success("Edited thumbnail generated");
+    } catch (error) {
+      console.error("Edit error:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to edit image");
+    } finally {
+      setPendingGenerations((prev) => prev.filter((p) => p.id !== generationId));
+      setIsEditingImage(false);
+    }
+  };
+
+  const copyImageToClipboard = async (image: GeneratedImage, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+
+    try {
+      if (!navigator.clipboard || !("ClipboardItem" in window)) {
+        throw new Error("Clipboard image copy is not available in this browser");
+      }
+
+      const blob = await fetch(`data:image/png;base64,${image.base64}`).then((res) => res.blob());
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type || "image/png"]: blob,
+        }),
+      ]);
+      toast.success("Copied image to clipboard");
+    } catch (error) {
+      console.error("Clipboard copy error:", error);
+      toast.error(error instanceof Error ? error.message : "Could not copy image");
+    }
   };
 
   const downloadImage = (image: GeneratedImage) => {
@@ -841,6 +933,20 @@ const Index = () => {
                     {!selectMode && (
                       <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="bg-black/60 rounded-md p-1.5 flex items-center gap-1">
+                          <button
+                            onClick={(e) => copyImageToClipboard(image, e)}
+                            className="w-6 h-6 rounded hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white"
+                            title="Copy image"
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={(e) => openEditDialog(image, e)}
+                            className="w-6 h-6 rounded hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white"
+                            title="Edit with GPT Image"
+                          >
+                            <Wand2 className="w-3.5 h-3.5" />
+                          </button>
                           <GripVertical className="w-3 h-3 text-white/60" />
                           <span className="text-xs text-white/60">Drag to use</span>
                         </div>
@@ -1370,6 +1476,15 @@ const Index = () => {
                 {isHoveringViewer ? (
                   <>
                     <Button
+                      onClick={() => copyImageToClipboard(viewingImage)}
+                      variant="secondary"
+                      size="sm"
+                      className="bg-black/60 hover:bg-black/80 text-white border-0"
+                    >
+                      <Copy className="w-4 h-4 mr-2" />
+                      Copy
+                    </Button>
+                    <Button
                       onClick={() => downloadImage(viewingImage)}
                       variant="secondary"
                       size="sm"
@@ -1387,9 +1502,21 @@ const Index = () => {
                       <ImageDown className="w-4 h-4 mr-2" />
                       Insert into prompt
                     </Button>
+                    <Button
+                      onClick={() => openEditDialog(viewingImage)}
+                      variant="secondary"
+                      size="sm"
+                      className="bg-black/60 hover:bg-black/80 text-white border-0"
+                    >
+                      <Wand2 className="w-4 h-4 mr-2" />
+                      Edit
+                    </Button>
                   </>
                 ) : (
                   <>
+                    <div className="p-2 rounded-md">
+                      <Copy className="w-4 h-4 text-white/30" />
+                    </div>
                     <div className="p-2 rounded-md">
                       <Download className="w-4 h-4 text-white/30" />
                     </div>
@@ -1398,6 +1525,66 @@ const Index = () => {
                     </div>
                   </>
                 )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!editingImage} onOpenChange={(open) => !open && !isEditingImage && setEditingImage(null)}>
+        <DialogContent className="max-w-xl bg-[#1a1a1c] border-white/10 text-white">
+          {editingImage && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-24 aspect-video rounded-lg overflow-hidden bg-black/30">
+                  <img
+                    src={`data:image/png;base64,${editingImage.base64}`}
+                    alt={editingImage.prompt}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold">Edit thumbnail</h2>
+                  <p className="text-sm text-white/40 line-clamp-2">{editingImage.prompt}</p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-white/70">Edit prompt</Label>
+                <Textarea
+                  value={editPrompt}
+                  onChange={(e) => setEditPrompt(e.target.value)}
+                  placeholder="Example: make the text bigger, add a Remotion logo, brighter background, keep Riley's face"
+                  className="min-h-28 bg-white/5 border-white/10 text-white placeholder:text-white/30 resize-none"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="ghost"
+                  onClick={() => setEditingImage(null)}
+                  disabled={isEditingImage}
+                  className="text-white/60 hover:text-white hover:bg-white/5"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleEditImage}
+                  disabled={!editPrompt.trim() || isEditingImage}
+                  className="bg-white text-black hover:bg-white/90"
+                >
+                  {isEditingImage ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Editing...
+                    </>
+                  ) : (
+                    <>
+                      <Wand2 className="w-4 h-4 mr-2" />
+                      Generate edit
+                    </>
+                  )}
+                </Button>
               </div>
             </div>
           )}

@@ -80,7 +80,7 @@ const Elements = () => {
   const [editColor, setEditColor] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "https://riley-thumbnail-api.worker.chorus.host";
 
   useEffect(() => {
     fetchElements(0, true);
